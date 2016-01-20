@@ -31,3 +31,13 @@ html, body {
   background-size: cover;
   background: no-repeat center center fixed;
 }
+
+.visible {
+  display: block;
+  visibility: visible;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
