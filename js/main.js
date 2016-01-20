@@ -3,40 +3,56 @@
 
 'use strict';
 
+function toggleVisibility(classes) {
+  return classes.indexOf('visible') !== -1
+        ? classes.replace('visible', 'hidden')
+        : classes.replace('hidden', 'visible');
+}
+
 (function() {
+  function setStorieshandler() {
+    var clusters = document.getElementsByClassName('cluster');
+
+    for (var i = 0; i < clusters.length; i++) {
+      clusters[i].addEventListener('click', function(event) {
+        event.preventDefault();
+
+        var cluster = this;
+        cluster.classList.add('vanishOut');
+
+        // zoom.out();
+        zoom.to({
+          padding: 100,
+          element: cluster,
+
+          getZoomArea: function() {
+            return {
+              top: cluster.top,
+              left: cluster.left,
+              width: cluster.width,
+              height: cluster.height
+            };
+          },
+
+          callback: function() {
+            // "clusterId" serve a determinare la lista degli eventi
+            // (mini-storie) che fanno parte del singolo cluster:
+            var clusterId = cluster.classList[2].replace('story-', '');
+            var balls = document.querySelectorAll('.ball-' + clusterId);
+
+            for (var i = 0; i < balls.length; i++) {
+              balls[i].className = toggleVisibility( balls[i].className );
+              balls[i].classList.add('swashInLinear');
+            }
+
+
+          }
+        });
+      });
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
-    var step = 0;
-    var colors = [[62,35,255], [60,255,60], [255,35,98], [45,175,230], [255,0,255], [255,128,0]];
-    var colorIndices = [0,1,2,3];
-
-    setInterval(function() {
-      var c0_0 = colors[colorIndices[0]];
-      var c0_1 = colors[colorIndices[1]];
-      var c1_0 = colors[colorIndices[2]];
-      var c1_1 = colors[colorIndices[3]];
-
-      var istep = 1 - step;
-      var r1 = Math.round(istep * c0_0[0] + step * c0_1[0]);
-      var g1 = Math.round(istep * c0_0[1] + step * c0_1[1]);
-      var b1 = Math.round(istep * c0_0[2] + step * c0_1[2]);
-      
-      var r2 = Math.round(istep * c1_0[0] + step * c1_1[0]);
-      var g2 = Math.round(istep * c1_0[1] + step * c1_1[1]);
-      var b2 = Math.round(istep * c1_0[2] + step * c1_1[2]);
-      
-      document.body.style.background = '-webkit-radial-gradient(circle, rgb(' + r1 + ', ' + g1 + ', ' + b1 + '), rgb(' + r2 + ', ' + g2 + ', ' + b2 + '))';
-
-      step += 0.01;
-
-      if ( step >= 1 ) {
-        step %= 1; // ???
-
-        colorIndices[0] = colorIndices[1];
-        colorIndices[2] = colorIndices[3];
-
-        colorIndices[1] = ( colorIndices[1] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
-        colorIndices[3] = ( colorIndices[3] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
-      }
-    }, 100 );
+    setStorieshandler();
   });
 })();
