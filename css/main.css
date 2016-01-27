@@ -17,6 +17,10 @@ html, body {
   font-family: 'Roboto', Helvetica, Arial, sans-serif;  
 }
 
+body {
+  background: #309ABB;
+}
+
 #app {
   margin:     inherit;
   padding:    inherit;
@@ -35,6 +39,7 @@ html, body {
 .visible {
   display: block;
   visibility: visible;
+  opacity: 1;
 }
 
 .hidden {

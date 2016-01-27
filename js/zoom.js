@@ -40,11 +40,16 @@ var zoom = (function(){
 	}
 
 	// Zoom out if the user hits escape
-	document.addEventListener( 'keyup', function( event ) {
-		if( level !== 1 && event.keyCode === 27 ) {
-			zoom.out();
-		}
-	} );
+	
+	// SVILUPPO
+	// PER ADESSO SI ELIMINA LA SHORTCUT DA TASTIERA
+	// VALUTIAMO SE METTTERE UN PULSANTE PER TORNARE INDIETRO
+
+	// document.addEventListener( 'keyup', function( event ) {
+	// 	if( level !== 1 && event.keyCode === 27 ) {
+	// 		zoom.out();
+	// 	}
+	// } );
 
 	// Monitor mouse movement for panning
 	document.addEventListener( 'mousemove', function( event ) {
