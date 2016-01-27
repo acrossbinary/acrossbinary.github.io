@@ -61,6 +61,7 @@
     }, 16 );
   }
 
+
   function setStorieshandler() {
     var clusters = document.getElementsByClassName('cluster');
 
