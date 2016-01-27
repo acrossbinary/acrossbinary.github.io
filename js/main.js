@@ -1,15 +1,66 @@
-// La "cosa" che ha fatto il buon Mario:
-// http://codepen.io/quasimondo/pen/lDdrF
-
 'use strict';
 
-function toggleVisibility(classes) {
-  return classes.indexOf('visible') !== -1
-        ? classes.replace('visible', 'hidden')
-        : classes.replace('hidden', 'visible');
-}
-
 (function() {
+  function animateBalls(orbs, position) {
+    var pos = [], currPos = [], onPlace = [];
+
+    for (var i = 0; i < orbs.length; i++) {
+      pos.push(getScreenDimentions(position[i]));
+      onPlace.push({h0: null, h1: null, w0: null, w1: null});
+    }
+
+    // Una si fa finire direttamente qui:
+    for (var i = 0; i < pos.length; i++) {
+      currPos.push({
+        height: parseInt(getComputedStyle(orbs[i]).top.replace('px', '')),
+        width: parseInt(getComputedStyle(orbs[i]).left.replace('px', ''))
+      });
+
+      // orbs[i].style.top  = pos[i].height + 'px';
+      // orbs[i].style.left = pos[i].width  + 'px';
+    }
+
+    // Questa e' l'altra:
+    var interval = setInterval(function() {
+      var i;
+
+      for (i = 0; i < orbs.length; i++) {
+
+        if (currPos[i].height > pos[i].height) {
+          onPlace[i].h1 = false;
+          currPos[i].height -= 2;
+          orbs[i].style.top = currPos[i].height + 'px';
+        } else if (currPos[i].height < pos[i].height) {
+          onPlace[i].h1 = true;
+          currPos[i].height += 2;                       
+          orbs[i].style.top = currPos[i].height + 'px';
+        }
+
+        if (currPos[i].width > pos[i].width) {
+          onPlace[i].w1 = false;
+          currPos[i].width -= 2;
+          orbs[i].style.left = currPos[i].width + 'px';
+        } else if (currPos[i].width < pos[i].width) {
+          onPlace[i].w1 = true;
+          currPos[i].width += 2;
+          orbs[i].style.left = currPos[i].width + 'px';
+        }
+
+        // First Lap:
+        if (onPlace[i].h0 === null) {
+          onPlace[i].h0 = onPlace[i].h1;
+          onPlace[i].w0 = onPlace[i].w1;
+        } else if (i === orbs.length - 1) {
+          for (var j = 0; j < orbs.length; j++) {
+            if (onPlace[j].h0 !== onPlace[j].h1 || onPlace[j].w0 !== onPlace[j].w1) {
+              if (j === orbs.length - 1) clearInterval(interval);
+            } else break;
+          }
+        }
+      }
+    }, 16 );
+  }
+
   function setStorieshandler() {
     var clusters = document.getElementsByClassName('cluster');
 
@@ -18,7 +69,7 @@ function toggleVisibility(classes) {
         event.preventDefault();
 
         var cluster = this;
-        cluster.classList.add('vanishOut');
+        cluster.classList.add('vanishOut'); // manca "magic"
 
         // zoom.out();
         zoom.to({
@@ -35,17 +86,29 @@ function toggleVisibility(classes) {
           },
 
           callback: function() {
-            // "clusterId" serve a determinare la lista degli eventi
-            // (mini-storie) che fanno parte del singolo cluster:
-            var clusterId = cluster.classList[2].replace('story-', '');
-            var balls = document.querySelectorAll('.ball-' + clusterId);
+            var clusterId = cluster.classList[2].replace('story-', ''),
+                balls = document.querySelectorAll('.ball-' + clusterId),
+
+              positions = [
+                {top: .5, left: -1},
+                {top: 3, left: 22},
+                {top: 18, left: 18},
+                {top: 10, left: 30},
+                {top: 80, left: 20}
+              ];
 
             for (var i = 0; i < balls.length; i++) {
-              balls[i].className = toggleVisibility( balls[i].className );
-              balls[i].classList.add('swashInLinear');
+              balls[i].classList.add('story-' + clusterId);
+              balls[i].classList.add('resizeBalls');
+              balls[i].className = toggleVisibility(balls[i].className);
             }
 
+            for (var i = 0; i < 5;) {
+              var clstr = document.getElementsByClassName('story-' + (++i))[0]; // ...ById
+              clstr.className = toggleVisibility(clstr.className);
+            }
 
+            animateBalls(balls, positions);
           }
         });
       });
@@ -53,6 +116,10 @@ function toggleVisibility(classes) {
   }
 
   document.addEventListener('DOMContentLoaded', function() {
+    // ATTENZIONE:
+    setStorieshandler(); return;
+
+
     var step = 0;
     // Order by tone
     var colors = [[0,12,39], [18,52,82], [26,71,157], [48,154,187], [54,172,116], [255,128,0]];
