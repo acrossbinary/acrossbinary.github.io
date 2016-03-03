@@ -4,7 +4,7 @@
   angular.module('across_binary', [])
     .controller('appBackgroundController', function() {
         // Sets a dynamic background to the main page:
-        setBackgroundImage();
+        // setBackgroundImage();
     })
 
     .controller('timelineController', ['$scope', 'ageService',

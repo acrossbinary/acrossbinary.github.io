@@ -29,22 +29,27 @@
       <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-material.min.js"></script>
     -->
 
-    <script type="text/javascript" src="./scripts/lib/angular.min.js"></script>
+    <script type="text/javascript" src="./scripts/lib/angular.js/angular.min.js"></script>
+    <script type="text/javascript" src="./scripts/lib/three.js/three.min.js"></script>
 
     <!-- # Angular Material Dependencies:
 
-      <script type="text/javascript" src="./scripts/lib/angular-animate.min.js"></script>
-      <script type="text/javascript" src="./scripts/lib/angular-aria.min.js"></script>
-      <script type="text/javascript" src="./scripts/lib/angular-material.min.js"></script>
+      <script type="text/javascript" src="./scripts/lib/angular.js/angular-animate.min.js"></script>
+      <script type="text/javascript" src="./scripts/lib/angular.js/angular-aria.min.js"></script>
+      <script type="text/javascript" src="./scripts/lib/angular.js/angular-material.min.js"></script>
      -->
     <!-- <script type="text/javascript" src="./scripts/lib/zoom.js"></script> -->
     <script type="text/javascript" src="./scripts/utils.js"></script>
     <script type="text/javascript" src="./scripts/main.js"></script>
+    <script type="text/javascript" src="./scripts/sphere.js"></script>
   </head>
 
   <body>
+
+
     <div id="app" ng-app="across_binary" ng-controller="appBackgroundController">
-      <div id="timeline" ng-controller="timelineController">      
+      <div class="canvas-sphere"></div>
+      <!-- <div id="timeline" ng-controller="timelineController">      
         
         <div id="it-ages"
              ng-mouseover=""             
@@ -57,7 +62,7 @@
           </div>
 
         </div>
-      </div>
+      </div> -->
     </div>
   </body>
 </html>
